@@ -1,7 +1,7 @@
 {
-  "name": "logseq-starter-plugin",
+  "name": "logseq-bionic-speedreader",
   "version": "1.0",
-  "description": "Starter Plugin",
+  "description": "Bionic Speedreader",
   "main": "dist/index.html",
   "targets": {
     "main": false
@@ -14,11 +14,11 @@
   "author": "Aryan Sawhney",
   "license": "MIT",
   "dependencies": {
-    "@logseq/libs": "0.0.1-alpha.34"
+    "@logseq/libs": "0.0.6"
   },
   "logseq": {
-    "id": "logseq-starter-plugin",
-    "title": "logseq-starter-plugin",
+    "id": "logseq-bionic-speedreader",
+    "title": "logseq-bionic-speedreader",
     "icon": "./icon.png"
   },
   "devDependencies": {
