@@ -3,7 +3,10 @@
 # Logseq Bionic Speedreader
 A plugin to help read faster, with better comprehension and more retention. 
 
-##Instructions
+
+https://user-images.githubusercontent.com/80150109/170867699-9ff15056-e34e-47ca-b86a-77386c08f671.mov
+
+## Instructions
 1. Type `mod+b+s` or click the "atom" icon in the toolbar
 2. Enjoy :)
 ## Configuration
