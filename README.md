@@ -4,7 +4,7 @@
 A plugin to help read faster, with better comprehension and more retention. 
 
 ##Instructions
-1. Type `mod+b+c` or click the "atom" icon in the toolbar
+1. Type `mod+b+s` or click the "atom" icon in the toolbar
 2. Enjoy :)
 ## Configuration
 You can configure the shortcut used in the plugin by going to Logseq settings -> plugin settings -> Bionic Speedreader
