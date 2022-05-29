@@ -28,18 +28,34 @@ const observer = new MutationObserver(ToggleBionicModeToggled);
 
 //Full credits to the awesome RoamResearch plugin https://github.com/fbgallet/Roam-extensions/blob/main/bionic_text.js
 
-const settings: SettingSchemaDesc[] = [{
-  key: "bionicKeybinding",
-  description: "Keybinding to toggle Bionic Speedreader Mode",
-  type: "string",
-  default: "mod+b mod+s",
-  title: "Keybinding for Bionic Speedreading",
-}]
+const settings: SettingSchemaDesc[] = [
+  {
+    key: "bionicKeybinding",
+    description: "Keybinding to toggle Bionic Speedreader Mode",
+    type: "string",
+    default: "mod+b mod+s",
+    title: "Keybinding for Bionic Speedreading",
+  },
+  {
+    key: "fixation",
+    description: "Define the expression of the letter combinations",
+    type: "number",
+    default: "50",
+    title: "Fixation",
+  },
+  {
+    key: "saccade",
+    description: "Define the visual jumps from Fixation to Fixation",
+    type: "number",
+    default: "1",
+    title: "Saccade",
+  },
+]
 
 logseq.useSettingsSchema(settings)
 function ToggleBionicMode() {
-  fixNum = parseInt(fixation);
-  sacNum = parseInt(saccade);
+  fixNum = parseInt(logseq.settings?.fixation) ?? 50;
+  sacNum = parseInt(logseq.settings?.saccade) ?? 1;
   
   if (isOn) console.log("Bionic text on");
   else console.log("Bionic text off");
