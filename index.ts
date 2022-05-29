@@ -1,4 +1,5 @@
 import "@logseq/libs";
+import { SettingSchemaDesc } from "@logseq/libs/dist/LSPlugin.user";
 
 var fixation = "50";
 var saccade = "1";
@@ -10,10 +11,6 @@ var isOn = true;
 const config = { attributes: true, childList: true, subtree: true };
 
 // Callback function to execute when mutations are observed
-const callback = function () {
-  // Use traditional 'for loops' for IE 11
-  ToggleBionicMode();
-};
 
 const throttle = (func, limit) => {
   let inThrottle;
@@ -30,6 +27,16 @@ const ToggleBionicModeToggled = throttle(ToggleBionicMode, 300);
 const observer = new MutationObserver(ToggleBionicModeToggled);
 
 //Full credits to the awesome RoamResearch plugin https://github.com/fbgallet/Roam-extensions/blob/main/bionic_text.js
+
+const settings: SettingSchemaDesc[] = [{
+  key: "bionicKeybinding",
+  description: "Keybinding to toggle Bionic Speedreader Mode",
+  type: "string",
+  default: "mod+b mod+s",
+  title: "Keybinding for Bionic Speedreading",
+}]
+
+logseq.useSettingsSchema(settings)
 function ToggleBionicMode() {
   fixNum = parseInt(fixation);
   sacNum = parseInt(saccade);
@@ -161,7 +168,7 @@ const main = () => {
     // }, 300);
   });
 
-  logseq.App.registerCommandShortcut({ binding: "mod+t" }, () => {
+  logseq.App.registerCommandShortcut({ binding: logseq.settings.bionicKeybinding }, () => {
     updateUI();
   });
 };
