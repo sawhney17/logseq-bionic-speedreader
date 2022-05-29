@@ -33,10 +33,7 @@ const observer = new MutationObserver(ToggleBionicModeToggled);
 function ToggleBionicMode() {
   fixNum = parseInt(fixation);
   sacNum = parseInt(saccade);
-  setTimeout(() => {
-    targetNode = top.document.getElementById("app-container");
-    observer.observe(targetNode!, config);
-  }, 300);
+  
   if (isOn) console.log("Bionic text on");
   else console.log("Bionic text off");
   let elt = top.document.getElementsByClassName("block-content");
@@ -127,6 +124,12 @@ function updateUI() {
 
   ToggleBionicMode();
   if (isOn) {
+    observer.disconnect()
+    setTimeout(() => {
+      targetNode = top.document.getElementById("app-container");
+      observer.observe(targetNode!, config);
+    }, 300);
+
     logseq.App.registerUIItem("toolbar", {
       key: "Bionic",
       template: `<a class="button" data-on-click="startup">
