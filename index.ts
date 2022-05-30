@@ -1,9 +1,6 @@
 import "@logseq/libs";
 import { SettingSchemaDesc } from "@logseq/libs/dist/LSPlugin.user";
 
-var fixation = "50";
-var saccade = "1";
-var buttonInTopBar = "yes";
 var fixNum, sacNum;
 var isOn = true;
 
@@ -22,28 +19,44 @@ const throttle = (func, limit) => {
   };
 };
 
-var targetNode = top.document.getElementById("app-container");
+var targetNode = top!.document.getElementById("app-container");
 const ToggleBionicModeToggled = throttle(ToggleBionicMode, 300);
 const observer = new MutationObserver(ToggleBionicModeToggled);
 
 //Full credits to the awesome RoamResearch plugin https://github.com/fbgallet/Roam-extensions/blob/main/bionic_text.js
 
-const settings: SettingSchemaDesc[] = [{
-  key: "bionicKeybinding",
-  description: "Keybinding to toggle Bionic Speedreader Mode",
-  type: "string",
-  default: "mod+b mod+s",
-  title: "Keybinding for Bionic Speedreading",
-}]
+const settings: SettingSchemaDesc[] = [
+  {
+    key: "bionicKeybinding",
+    description: "Keybinding to toggle Bionic Speedreader Mode",
+    type: "string",
+    default: "mod+b mod+s",
+    title: "Keybinding for Bionic Speedreading",
+  },
+  {
+    key: "fixation",
+    description: "Define the expression of the letter combinations",
+    type: "number",
+    default: "50",
+    title: "Fixation",
+  },
+  {
+    key: "saccade",
+    description: "Define the visual jumps from Fixation to Fixation",
+    type: "number",
+    default: "1",
+    title: "Saccade",
+  },
+]
 
 logseq.useSettingsSchema(settings)
 function ToggleBionicMode() {
-  fixNum = parseInt(fixation);
-  sacNum = parseInt(saccade);
+  fixNum = parseInt(logseq.settings?.fixation) ?? 50;
+  sacNum = parseInt(logseq.settings?.saccade) ?? 1;
   
   if (isOn) console.log("Bionic text on");
   else console.log("Bionic text off");
-  let elt = top.document.getElementsByClassName("block-content");
+  let elt = top!.document.getElementsByClassName("block-content");
   for (let i = 0; i < elt.length; i++) {
     if (isTextBlock(elt[i].innerHTML) == true) {
       elt[i].innerHTML = elt[i].innerHTML
@@ -52,7 +65,7 @@ function ToggleBionicMode() {
       if (isOn == false) {
         continue;
       }
-      let spanTab = [];
+      let spanTab : Element[] = [];
       spanTab = splitTextFromHtml(elt[i].innerHTML);
       spanTab = processBlockSegments(spanTab);
       elt[i].innerHTML = spanTab.join("");
@@ -71,10 +84,9 @@ function ToggleBionicMode() {
   }
 
   function splitTextFromHtml(htmlStr) {
-    let tab = [];
-    let index = 0;
+    let tab : number[] = [];
     tab = getAllIndexOf("<", ">", htmlStr);
-    let splitTab = [];
+    let splitTab : HTMLElement[] = [];
     let shiftL = 0;
     let shiftR = 1;
     for (let i = 0; i < tab.length - 1; i++) {
@@ -88,7 +100,7 @@ function ToggleBionicMode() {
 
   function getAllIndexOf(s1, s2, str) {
     let index = 0;
-    let tab = [];
+    let tab : number[] = [];
     while (index != -1) {
       index = str.indexOf(s1, index);
       if (index == -1) break;
@@ -133,7 +145,7 @@ function updateUI() {
   if (isOn) {
     observer.disconnect()
     setTimeout(() => {
-      targetNode = top.document.getElementById("app-container");
+      targetNode = top!.document.getElementById("app-container");
       observer.observe(targetNode!, config);
     }, 300);
 
@@ -168,8 +180,13 @@ const main = () => {
     // }, 300);
   });
 
-  logseq.App.registerCommandShortcut({ binding: logseq.settings.bionicKeybinding }, () => {
-    updateUI();
-  });
+  if (logseq.settings !== undefined) {
+    logseq.App.registerCommandShortcut({ binding: logseq.settings.bionicKeybinding }, () => {
+      updateUI();
+    });
+  } else {
+    console.error('logseq settings undefined')
+  }
+  
 };
 logseq.ready(main).catch(console.error);
