@@ -47,13 +47,13 @@ const settings: SettingSchemaDesc[] = [
     default: "1",
     title: "Saccade",
   },
-]
+];
 
-logseq.useSettingsSchema(settings)
+logseq.useSettingsSchema(settings);
 function ToggleBionicMode() {
   fixNum = parseInt(logseq.settings?.fixation) ?? 50;
   sacNum = parseInt(logseq.settings?.saccade) ?? 1;
-  
+
   if (isOn) console.log("Bionic text on");
   else console.log("Bionic text off");
   let elt = top!.document.getElementsByClassName("block-content");
@@ -65,7 +65,7 @@ function ToggleBionicMode() {
       if (isOn == false) {
         continue;
       }
-      let spanTab : Element[] = [];
+      let spanTab: Element[] = [];
       spanTab = splitTextFromHtml(elt[i].innerHTML);
       spanTab = processBlockSegments(spanTab);
       elt[i].innerHTML = spanTab.join("");
@@ -84,9 +84,9 @@ function ToggleBionicMode() {
   }
 
   function splitTextFromHtml(htmlStr) {
-    let tab : number[] = [];
+    let tab: number[] = [];
     tab = getAllIndexOf("<", ">", htmlStr);
-    let splitTab : HTMLElement[] = [];
+    let splitTab: HTMLElement[] = [];
     let shiftL = 0;
     let shiftR = 1;
     for (let i = 0; i < tab.length - 1; i++) {
@@ -100,7 +100,7 @@ function ToggleBionicMode() {
 
   function getAllIndexOf(s1, s2, str) {
     let index = 0;
-    let tab : number[] = [];
+    let tab: number[] = [];
     while (index != -1) {
       index = str.indexOf(s1, index);
       if (index == -1) break;
@@ -125,7 +125,9 @@ function ToggleBionicMode() {
     return tab;
   }
 
-  function boldHalfWord(word) {
+  function boldHalfWord(word: string) {
+    // console.log(word.match(/[^\u007f-\u1F6FF\s]/));
+    // if (word.match(/[^\u1F600-\u1F6FF\s]/) == null) {
     let midIndex = 0;
     let len = word.length;
     if (len > 3) midIndex = Math.ceil((len * fixNum) / 100);
@@ -134,6 +136,8 @@ function ToggleBionicMode() {
       if (midIndex < 1) midIndex = 1;
     }
     word = "<b>" + word.slice(0, midIndex) + "</b>" + word.slice(midIndex);
+    // }
+    // }
     return word;
   }
 }
@@ -143,7 +147,7 @@ function updateUI() {
 
   ToggleBionicMode();
   if (isOn) {
-    observer.disconnect()
+    observer.disconnect();
     setTimeout(() => {
       targetNode = top!.document.getElementById("app-container");
       observer.observe(targetNode!, config);
@@ -181,12 +185,14 @@ const main = () => {
   });
 
   if (logseq.settings !== undefined) {
-    logseq.App.registerCommandShortcut({ binding: logseq.settings.bionicKeybinding }, () => {
-      updateUI();
-    });
+    logseq.App.registerCommandShortcut(
+      { binding: logseq.settings.bionicKeybinding },
+      () => {
+        updateUI();
+      }
+    );
   } else {
-    console.error('logseq settings undefined')
+    console.error("logseq settings undefined");
   }
-  
 };
 logseq.ready(main).catch(console.error);
